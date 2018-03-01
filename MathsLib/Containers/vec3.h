@@ -77,6 +77,16 @@ namespace Maths::Containers {
 		{
 			return lhs.Divide(scalar);
 		}
+
+		friend bool operator == (const vec3<T>& lhs, const vec3<T>& rhs)
+		{
+			return (lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z);
+		}
+
+		friend bool operator != (const vec3<T>& lhs, const vec3<T>& rhs)
+		{
+			return !(lhs == rhs);
+		}
 	};
 
 	template <typename T>

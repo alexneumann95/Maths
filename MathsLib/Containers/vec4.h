@@ -80,6 +80,16 @@ namespace Maths::Containers {
 		{
 			return lhs.Divide(scalar);
 		}
+
+		friend bool operator == (const vec4<T>& lhs, const vec4<T>& rhs)
+		{
+			return (lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z && lhs.W == rhs.W);
+		}
+
+		friend bool operator != (const vec4<T>& lhs, const vec4<T>& rhs)
+		{
+			return !(lhs == rhs);
+		}
 	};
 
 	template <typename T>

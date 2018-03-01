@@ -3,6 +3,8 @@
 #include "vec3.h"
 #include "vec4.h"
 
+#include <cstring>
+
 namespace Maths::Containers {
 
 	template <typename T>
@@ -29,11 +31,20 @@ namespace Maths::Containers {
 		static mat4<T> LookAt(const vec3<T>& position, const vec3<T>& centre, const vec3<T>& up = vec3(0.0f, 1.0f, 0.0f));
 		static mat4<T> Perspective(float fov, float aspectRatio, float n, float f);
 
-		friend std::ostream& operator << (std::ostream& os, const mat4<T>& matrix);
-
 		friend mat4<T> operator * (mat4<T> lhs, const mat4<T>& rhs)
 		{
 			return lhs.Multiply(rhs);
+		}
+
+		friend std::ostream& operator << (std::ostream& os, const mat4<T>& matrix)
+		{
+			for (int i = 0; i < 16; i++)
+			{
+				os << matrix.Elements[i] << "\t";
+				if (i == 3 || i == 7 || i == 11 || i == 15)
+					os << "\n";
+			}
+			return os;
 		}
 	};
 
@@ -79,14 +90,6 @@ namespace Maths::Containers {
 		memcpy(Elements, data, 16 * sizeof(T));
 		return *this;
 	}
-
-	/*
-	template <typename T>
-	mat4<T> operator * (mat4<T> lhs, const mat4<T>& rhs)
-	{
-		return lhs.Multiply(rhs);
-	}
-	*/
 
 	template <typename T>
 	mat4<T>& mat4<T>::operator *= (const mat4<T>& other)
@@ -175,18 +178,6 @@ namespace Maths::Containers {
 		};
 
 		return perspectiveMatrix;
-	}
-
-	template <typename T>
-	std::ostream& operator << (std::ostream& os, const mat4<T>& matrix)
-	{
-		for (int i = 0; i < 16; i++)
-		{
-			os << matrix.Elements[i] << "\t";
-			if (i == 3 || i == 7 || i == 11 || i == 15)
-				os << "\n";
-		}
-		return os;
 	}
 
 }
