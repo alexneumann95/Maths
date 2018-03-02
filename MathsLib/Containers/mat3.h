@@ -26,6 +26,8 @@ namespace Maths::Containers {
 		mat3<T>& operator *= (const mat3<T>& other);
 
 		static mat3<T> Identity();
+		static mat3<T> Transpose(const mat3<T>& matrix);
+		static mat3<T> Inverse(const mat3<T>& matrix);
 
 		friend mat3<T> operator * (mat3<T> lhs, const mat3<T>& rhs)
 		{
@@ -103,6 +105,55 @@ namespace Maths::Containers {
 	mat3<T> mat3<T>::Identity()
 	{
 		return mat3<T>(1.0f);
+	}
+
+	template <typename T>
+	mat3<T> mat3<T>::Transpose(const mat3<T>& matrix)
+	{
+		mat3<T> result;
+
+		result.Elements[0] = matrix.Elements[0];
+		result.Elements[1] = matrix.Elements[3];
+		result.Elements[2] = matrix.Elements[6];
+		result.Elements[3] = matrix.Elements[1];
+		result.Elements[4] = matrix.Elements[4];
+		result.Elements[5] = matrix.Elements[7];
+		result.Elements[6] = matrix.Elements[2];
+		result.Elements[7] = matrix.Elements[5];
+		result.Elements[8] = matrix.Elements[8];
+
+		return result;
+	}
+
+	template <typename T>
+	mat3<T> mat3<T>::Inverse(const mat3<T>& matrix)
+	{
+		mat3<T> result;
+
+		// Calculate matrix of cofactors
+		result.Elements[0] = matrix.Elements[4] * matrix.Elements[8] - matrix.Elements[5] * matrix.Elements[7];
+		result.Elements[1] = T(-1.0f) * (matrix.Elements[3] * matrix.Elements[8] - matrix.Elements[5] * matrix.Elements[6]);
+		result.Elements[2] = matrix.Elements[3] * matrix.Elements[7] - matrix.Elements[4] * matrix.Elements[6];
+		result.Elements[3] = T(-1.0f) * (matrix.Elements[1] * matrix.Elements[8] - matrix.Elements[2] * matrix.Elements[7]);
+		result.Elements[4] = matrix.Elements[0] * matrix.Elements[8] - matrix.Elements[2] * matrix.Elements[6];
+		result.Elements[5] = T(-1.0f) * (matrix.Elements[0] * matrix.Elements[7] - matrix.Elements[1] * matrix.Elements[6]);
+		result.Elements[6] = matrix.Elements[1] * matrix.Elements[5] - matrix.Elements[2] * matrix.Elements[4];
+		result.Elements[7] = T(-1.0f) * (matrix.Elements[0] * matrix.Elements[5] - matrix.Elements[2] * matrix.Elements[3]);
+		result.Elements[8] = matrix.Elements[0] * matrix.Elements[4] - matrix.Elements[1] * matrix.Elements[3];
+
+		// Calculate Adjugate (Adjoint)
+		result = mat3<T>::Transpose(result);
+
+		// Calculate Determinat
+		float a = matrix.Elements[0] * (matrix.Elements[4] * matrix.Elements[8] - matrix.Elements[5] * matrix.Elements[7]);
+		float b = matrix.Elements[1] * (matrix.Elements[3] * matrix.Elements[8] - matrix.Elements[5] * matrix.Elements[6]);
+		float c = matrix.Elements[2] * (matrix.Elements[3] * matrix.Elements[7] - matrix.Elements[4] * matrix.Elements[6]);
+		float det = a - b + c;
+
+		// Multiply by 1/Determinat
+		result *= (1 / det);
+
+		return result;
 	}
 
 }

@@ -30,6 +30,7 @@ namespace Maths::Containers {
 		static mat4<T> Rotation(float angle, const vec3<T>& axis);
 		static mat4<T> LookAt(const vec3<T>& position, const vec3<T>& centre, const vec3<T>& up = vec3(0.0f, 1.0f, 0.0f));
 		static mat4<T> Perspective(float fov, float aspectRatio, float n, float f);
+		static mat4<T> Transpose(const mat4<T>& matrix);
 
 		friend mat4<T> operator * (mat4<T> lhs, const mat4<T>& rhs)
 		{
@@ -178,6 +179,31 @@ namespace Maths::Containers {
 		};
 
 		return perspectiveMatrix;
+	}
+
+	template <typename T>
+	mat4<T> mat4<T>::Transpose(const mat4<T>& matrix)
+	{
+		mat4<T> result;
+
+		result.Elements[0] = matrix.Elements[0];
+		result.Elements[1] = matrix.Elements[4];
+		result.Elements[2] = matrix.Elements[8];
+		result.Elements[3] = matrix.Elements[12];
+		result.Elements[4] = matrix.Elements[1];
+		result.Elements[5] = matrix.Elements[5];
+		result.Elements[6] = matrix.Elements[9];
+		result.Elements[7] = matrix.Elements[13];
+		result.Elements[8] = matrix.Elements[2];
+		result.Elements[9] = matrix.Elements[6];
+		result.Elements[10] = matrix.Elements[10];
+		result.Elements[11] = matrix.Elements[14];
+		result.Elements[12] = matrix.Elements[3];
+		result.Elements[13] = matrix.Elements[7];
+		result.Elements[14] = matrix.Elements[11];
+		result.Elements[15] = matrix.Elements[15];
+
+		return result;
 	}
 
 }
